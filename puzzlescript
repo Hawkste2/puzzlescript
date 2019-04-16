@@ -1,0 +1,173 @@
+title Simple Block Pushing Game
+author Stephen Lavelle
+homepage www.puzzlescript.net
+
+========
+OBJECTS
+========
+ ( http://www.ohiofi.com/blog/puzzlescript-rules/ 
+ extended rigidbody rules in documentation
+ )
+ 
+ (
+ the flip block game. gotta get the double cube in the right orientation to get to the win marker
+ 
+ a puzzle escape thing where u have limited moves. steal this guys counter stuff.
+ 
+ classic move the person puzzle thing but u can place bombs to destroy obstacles. also need to move certain objects
+ onto platforms to unklock door finish. Possible to blow these up and that would result in a loss. On blowup the tiles around bomb should be darker gray. bomb1 and bomb2 to give player time to run + an interval. 
+ )
+ 
+Background
+gray lightgray
+11111
+10001
+10001
+10001
+11111
+
+blueground
+lightblue blue
+00000
+01110
+01110
+01110
+00000
+
+teleporter
+darkred
+.....
+.0.0.
+..0..
+.0.0.
+.....
+
+lander
+darkred
+.....
+..0..
+.0.0.
+..0..
+.....
+
+Wall
+darkgray
+00000
+00000
+00000
+00000
+00000
+
+Target
+DarkBlue
+.....
+.000.
+.0.0.
+.000.
+.....
+
+Player
+Black Orange White Blue
+.000.
+.111.
+22222
+.333.
+.3.3.
+
+Crate
+Orange Yellow
+00000
+0...0
+0.0.0
+0...0
+00000
+
+Hole
+black lightgray
+10001
+00000
+00000
+00000
+10001
+
+counter
+darkgreen
+
+
+(flip game attempt)
+upp
+purple
+00000
+00000
+00000
+00000
+00000
+
+=======
+LEGEND
+=======
+(. , / ; ' [ ] - =)
+. = Background
+, = blueground
+# = Wall
+P = Player
+T = teleporter
+L = lander
+* = Crate
+@ = Crate and Target
+O = Target
+- = Hole
+/ = counter
+1 = upp
+
+=======
+SOUNDS
+=======
+
+Crate MOVE 36772507
+
+================
+COLLISIONLAYERS
+================
+
+Background
+blueground
+Target, teleporter, lander, hole 
+Player, Wall, Crate, counter, upp
+
+======
+RULES
+======
+
+[ >  Player | Crate ] -> [  >  Player | > Crate  ]
+
+late [ Player teleporter ] [ lander ] -> [ teleporter ] [ Player lander ]
+
+
+( lets you push through walls)
+[ > Player | upp | upp | no wall ] -> [ > player | Background | Background | upp]
+[ > player | upp | Background | no wall ] -> [ > player |Background | upp | upp]
+
+
+
+==============
+WINCONDITIONS
+==============
+
+All Target on Crate
+
+=======
+LEVELS
+=======
+
+####,t##
+####..##
+##o....,
+##...1.p
+##o....t
+####..##
+####,l##
+
+
+
+
