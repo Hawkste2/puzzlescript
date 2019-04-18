@@ -1,13 +1,11 @@
 title Simple Block Pushing Game
 author Stephen Lavelle
 homepage www.puzzlescript.net
-
+verbose_logging
 ========
 OBJECTS
 ========
- ( http://www.ohiofi.com/blog/puzzlescript-rules/ 
- extended rigidbody rules in documentation
- )
+ ( http://www.ohiofi.com/blog/puzzlescript-rules/ )
  
  (
  the flip block game. gotta get the double cube in the right orientation to get to the win marker
@@ -120,6 +118,8 @@ O = Target
 / = counter
 1 = upp
 
+blocker = wall or upp
+
 =======
 SOUNDS
 =======
@@ -144,9 +144,32 @@ RULES
 late [ Player teleporter ] [ lander ] -> [ teleporter ] [ Player lander ]
 
 
-( lets you push through walls)
-[ > Player | upp | upp | no wall ] -> [ > player | Background | Background | upp]
-[ > player | upp | Background | no wall ] -> [ > player |Background | upp | upp]
+
+
+( if 2 blocks are pushed then makes 1 block)
+[ > player | upp | upp | no blocker] -> [> player | Background | > upp |]
+
+( if 1 block pushed makes 2 blocks)
+(NEED THIS TO NOT APPLY IF OTHERS ALREADY HAPPENED)
+[ > player | upp | no blocker]  -> [  > player | > upp | > upp]
+
+(lets 2 blocks travel together)
+[ >  Player | upp ] -> [  >  Player | > upp  ]     
++ [ Moving upp | upp ] -> [ Moving upp |  Moving upp]
++ [ > player | upp | upp] -> [ > player | > upp |]
+
+
+(
+create an invisible object that if exists let one rule happen
+let the other rule happen if there is not the object [boolean]  [no boolean]
+)
+
+(
+rigid [ >  Player | upp ] -> [  >  Player | > upp  ]     
++ rigid [ Moving upp | upp ] -> [ Moving upp | MOVING upp ]
+)
+
+
 
 
 
@@ -161,11 +184,11 @@ LEVELS
 =======
 
 ####,t##
-####..##
+##.....#
 ##o....,
-##...1.p
+##..11.p
 ##o....t
-####..##
+##.....#
 ####,l##
 
 
