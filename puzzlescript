@@ -1,5 +1,5 @@
-title Simple Block Pushing Game
-author Stephen Lavelle
+title PuzzleScript Bloxorz
+author Travis Hawks
 homepage www.puzzlescript.net
 verbose_logging
 ========
@@ -15,161 +15,201 @@ OBJECTS
  classic move the person puzzle thing but u can place bombs to destroy obstacles. also need to move certain objects
  onto platforms to unklock door finish. Possible to blow these up and that would result in a loss. On blowup the tiles around bomb should be darker gray. bomb1 and bomb2 to give player time to run + an interval. 
  )
- 
-Background
-gray lightgray
-11111
-10001
-10001
-10001
-11111
-
-blueground
-lightblue blue
-00000
-01110
-01110
-01110
-00000
-
-teleporter
-darkred
-.....
-.0.0.
-..0..
-.0.0.
-.....
-
-lander
-darkred
-.....
-..0..
-.0.0.
-..0..
-.....
-
-Wall
-darkgray
-00000
-00000
-00000
-00000
-00000
-
-Target
-DarkBlue
-.....
-.000.
-.0.0.
-.000.
-.....
 
 Player
-Black Orange White Blue
+Black #ede6ad red #84753f
 .000.
 .111.
 22222
 .333.
 .3.3.
 
-Crate
-Orange Yellow
+Background
+#d1d1d1 #c4c4c4
+10001
+01010
+00100
+01010
+10001
+
+Wall
+#6d6d6d #7a7a7a
 00000
-0...0
-0.0.0
-0...0
+01010
+01010
+01010
 00000
 
 Hole
-black lightgray
+#3c3c3c #323232 #1e1e1e #0a0a0a black
+01210
+12321
+23432
+12321
+01210
+
+
+block
+#490893 #4a0796 #5009a0
+01210
+21021
+02120
+12021
+01210
+
+
+red
+red
+00000
+00000
+00000
+00000
+00000
+
+green
+green
+00000
+00000
+00000
+00000
+00000
+
+
+(extra)
+
+incinerator
+Red Orange yellow
+.222.
+22122
+21012
 10001
-00000
-00000
-00000
 10001
 
-counter
-darkgreen
+telegreen
+darkgreen green
+.....
+.000.
+.101.
+.101.
+.....
+
+landergreen
+darkgreen green
+.....
+.011.
+.011.
+.000.
+.....
+
+teleblue
+darkblue blue
+.....
+.000.
+.101.
+.101.
+.....
+
+landerblue
+darkblue blue
+.....
+.011.
+.011.
+.000.
+.....
 
 
-(flip game attempt)
-upp
-purple
-00000
-00000
-00000
-00000
-00000
+telegold
+#7f7001 #f7df2c
+.....
+.000.
+.101.
+.101.
+.....
+
+landergold
+#7f7001 #f7df2c
+.....
+.011.
+.011.
+.000.
+.....
+
 
 =======
 LEGEND
 =======
 (. , / ; ' [ ] - =)
 . = Background
-, = blueground
 # = Wall
 P = Player
-T = teleporter
-L = lander
-* = Crate
-@ = Crate and Target
-O = Target
 - = Hole
-/ = counter
-1 = upp
+1 = block
 
-blocker = wall or upp
+i = incinerator
+/ = telegreen
+\ = landergreen
+{ = teleblue
+} = landerblue
+` = telegold
+~ = landergold
+
+r = red
+g = green
+
+blocker = wall or block
 
 =======
 SOUNDS
 =======
 
-Crate MOVE 36772507
+block MOVE 60867707
+startlevel 81215308
 
 ================
 COLLISIONLAYERS
 ================
 
 Background
-blueground
-Target, teleporter, lander, hole 
-Player, Wall, Crate, counter, upp
+hole, telegreen, teleblue, landergreen, landerblue, telegold, landergold, incinerator
+Player, Wall, block red, green
 
 ======
 RULES
 ======
+( green = 2 blocks)
+(red = 1 block)
 
-[ >  Player | Crate ] -> [  >  Player | > Crate  ]
+(teleportation)
+late [ Player telegreen ] [ landergreen no block ] -> [ telegreen ] [ Player landergreen ]
+late [ Player teleblue ] [ landerblue no block ] -> [ teleblue ] [ Player landerblue ]
+late [ Player telegold] [ landergold no block ] -> [ telegold ] [ Player landergold ]
 
-late [ Player teleporter ] [ lander ] -> [ teleporter ] [ Player lander ]
 
-
-
-
+(block movement)
 ( if 2 blocks are pushed then makes 1 block)
-[ > player | upp | upp | no blocker] -> [> player | Background | > upp |]
+[ > player | block | block | no blocker][green] -> [> player | Background | > block |][red]
 
 ( if 1 block pushed makes 2 blocks)
-(NEED THIS TO NOT APPLY IF OTHERS ALREADY HAPPENED)
-[ > player | upp | no blocker]  -> [  > player | > upp | > upp]
+[ > player | block | no blocker][red]  -> [  > player | > block | > block][green]
 
 (lets 2 blocks travel together)
-[ >  Player | upp ] -> [  >  Player | > upp  ]     
-+ [ Moving upp | upp ] -> [ Moving upp |  Moving upp]
-+ [ > player | upp | upp] -> [ > player | > upp |]
+[ >  Player | block ] -> [  >  Player | > block  ]     
++ [ Moving block | block ] -> [ Moving block |  Moving block]
++ [ > block | wall] -> cancel
 
+(action button to place a new landing spot)
+[action player no Hole][landergold] -> [action player landergold][]
+[ Action player no Hole] -> [action player landergold]
+
+(incinerator rules)
+[ > player | incinerator] -> restart
+late[  incinerator block][red] -> restart
+late [block incinerator| block][green] -> [incinerator | block][red]
 
 (
 create an invisible object that if exists let one rule happen
 let the other rule happen if there is not the object [boolean]  [no boolean]
 )
-
-(
-rigid [ >  Player | upp ] -> [  >  Player | > upp  ]     
-+ rigid [ Moving upp | upp ] -> [ Moving upp | MOVING upp ]
-)
-
-
 
 
 
@@ -177,20 +217,51 @@ rigid [ >  Player | upp ] -> [  >  Player | > upp  ]
 WINCONDITIONS
 ==============
 
-All Target on Crate
+All block on Hole
+some block
 
 =======
 LEVELS
 =======
+( green = 2 blocks)
+(red = 1 block)
 
-####,t##
-##.....#
-##o....,
-##..11.p
-##o....t
-##.....#
-####,l##
+message tutorial 1: push the purple block(s) onto the hole tiles.
+########g
+#-...11p#
+#########
 
+
+message tutorial 2: teleport tiles (T) take you to landing tiles (L)
+########g
+#-11}#{p#
+#########
+
+
+message tutorial 3: The action button will place a gold landing location.
+########g
+#.#....`#
+#.#.....#
+#...11.p#
+#--######
+#########
+
+message tutorial 4: the incinerator tile will burn a block! use as needed but beware... dont burn your last block OR yourself!
+#######g.
+#-...1p#.
+#...i1##.
+########
+
+
+########r
+#....../#
+#.......#
+#.......#
+#-...1.p#
+#.......#
+#...##..#
+#......\#
+#########
 
 
 
