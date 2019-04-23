@@ -226,6 +226,7 @@ LEVELS
 ( green = 2 blocks)
 (red = 1 block)
 
+
 message tutorial 1: push the purple block(s) onto the hole tiles.
 ########g
 #-...11p#
@@ -246,13 +247,15 @@ message tutorial 3: The action button will place a gold landing location.
 #--######
 #########
 
+
 message tutorial 4: the incinerator tile will burn a block! use as needed but beware... dont burn your last block OR yourself!
 #######g.
 #-...1p#.
 #...i1##.
-########
+########.
 
 
+message Level 1: Easy Mode
 ########r
 #....../#
 #.......#
@@ -264,4 +267,57 @@ message tutorial 4: the incinerator tile will burn a block! use as needed but be
 #########
 
 
+message Level 2: Still easy
+########r
+#.......#
+#.......#
+#.......#
+#..#....#
+#..#-...#
+#.1###..#
+#.......#
+#...p...#
+#########
 
+
+message Level 3: You might actually have to think...
+#########g
+#..#p.../#
+#..##....#
+#..#1....#
+#...1...##
+#......###
+####..####
+#\......-#
+#.......-#
+##########
+
+
+message Level 4: Now this is a challenge.
+##########r
+#.....##}.#
+#.....##..#
+#.....##..#
+#..1......#
+#.........#
+#..####..-#
+#/.#......#
+#{p#......#
+#`.#\...#.#
+###########
+
+
+message Level 5: I am not sure this one is possible!
+##################g
+#/{`#..\.#...#....#
+#...#....#...#-...#
+#.p.#.##.#...##..##
+#...#....#.i......#
+#...#.............#
+#.................#
+#.11......#####.###
+#...#......#......#
+#.###..i..##......#
+#.#.......##......#
+###.}.....##......#
+###################
